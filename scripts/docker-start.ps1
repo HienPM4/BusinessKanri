@@ -8,8 +8,11 @@ Set-Location (Join-Path $PSScriptRoot "..")
 Write-Host "Starting PostgreSQL + backend..."
 docker compose up -d --build postgres backend
 
-Write-Host "Applying migration 001..."
-Get-Content "backend/migrations/001_init.sql" | docker compose exec -T postgres psql -U postgres -d sales_db -f -
+Write-Host "Applying migrations..."
+Get-ChildItem "backend/migrations/*.sql" | Sort-Object Name | ForEach-Object {
+    Write-Host "Applying $($_.Name)..."
+    Get-Content $_.FullName | docker compose exec -T postgres psql -U postgres -d sales_db -f -
+}
 
 if ($WithFrontend) {
     if (-not (Test-Path "frontend/package.json")) {

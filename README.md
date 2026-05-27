@@ -7,6 +7,7 @@ Sales data web system replacing Google Sheet workflow.
 - DB schema v1 created.
 - API contract v1 created.
 - Backend skeleton initialized.
+- Auth module initialized (login, refresh, JWT middleware, /v1/auth/me).
 - Frontend setup guide added.
 - Docker Compose setup added for backend + PostgreSQL.
 
@@ -18,6 +19,7 @@ Sales data web system replacing Google Sheet workflow.
 - docs/docker-setup.md
 - docs/docker-start-guide.md
 - docs/github-codespaces-guide.md
+- docs/ci-cd-guide.md
 
 ## Quick Start (GitHub Codespaces)
 If local Docker Desktop/Go/Node cannot be installed, use Codespaces:
@@ -36,3 +38,8 @@ powershell -ExecutionPolicy Bypass -File ./scripts/docker-start.ps1 -WithFronten
 
 Health check:
 - http://localhost:8080/health
+
+## CI/CD (GitHub Actions)
+- CI workflow: .github/workflows/ci.yml
+- CD workflow: .github/workflows/cd.yml
+- Setup guide: docs/ci-cd-guide.md

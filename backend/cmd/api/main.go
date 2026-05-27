@@ -23,7 +23,7 @@ func main() {
     }
     defer db.Close()
 
-    router := apphttp.NewRouter()
+    router := apphttp.NewRouter(db, cfg)
 
     srv := &http.Server{
         Addr:         ":" + cfg.Port,

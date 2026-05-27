@@ -18,10 +18,10 @@ Health check:
 - API: http://localhost:8080/health
 
 ## Apply migration
-Migration SQL is available at backend/migrations/001_init.sql.
-You can apply it inside PostgreSQL container:
+Migration SQL files are available in backend/migrations.
+You can apply all files inside PostgreSQL container:
 
-docker compose exec -T postgres psql -U postgres -d sales_db -f /dev/stdin < backend/migrations/001_init.sql
+Get-ChildItem "backend/migrations/*.sql" | Sort-Object Name | ForEach-Object { Get-Content $_.FullName | docker compose exec -T postgres psql -U postgres -d sales_db -f - }
 
 ## Stop services
 

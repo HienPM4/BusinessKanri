@@ -35,6 +35,20 @@ Response 200:
   "accessToken": "jwt"
 }
 
+### GET /auth/me
+Headers:
+- Authorization: Bearer <accessToken>
+
+Response 200:
+{
+  "user": {
+    "id": "uuid",
+    "email": "admin@example.com",
+    "fullName": "System Admin",
+    "role": "admin"
+  }
+}
+
 ## Customers
 
 ### GET /customers

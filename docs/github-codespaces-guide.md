@@ -32,7 +32,11 @@ Backend health check:
 ## 4) Apply migration (inside Codespaces)
 From project root terminal:
 
-psql "postgres://postgres:postgres@postgres:5432/sales_db?sslmode=disable" -f backend/migrations/001_init.sql
+for file in backend/migrations/*.sql; do psql "postgres://postgres:postgres@postgres:5432/sales_db?sslmode=disable" -f "$file"; done
+
+Default admin account after migration:
+- email: admin@example.com
+- password: admin123
 
 ## 5) Initialize frontend in Codespaces
 From project root terminal:

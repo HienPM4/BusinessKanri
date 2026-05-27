@@ -1,0 +1,66 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  run-migrations:
+    name: Run DB Migrations (Optional)
+    runs-on: ubuntu-latest
+    if: ${{ secrets.DATABASE_URL != '' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install psql client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Apply all migrations
+        run: |
+          for file in backend/migrations/*.sql; do
+            echo "Applying $file"
+            psql "${DATABASE_URL}" -f "$file"
+          done
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  deploy-frontend-vercel:
+    name: Deploy Frontend (Vercel Hook)
+    runs-on: ubuntu-latest
+    needs: [run-migrations]
+    if: ${{ always() && secrets.VERCEL_DEPLOY_HOOK_URL != '' }}
+
+    steps:
+      - name: Trigger Vercel deploy hook
+        run: curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+
+  deploy-backend-render:
+    name: Deploy Backend (Render Hook)
+    runs-on: ubuntu-latest
+    needs: [run-migrations]
+    if: ${{ always() && secrets.RENDER_DEPLOY_HOOK_URL != '' }}
+
+    steps:
+      - name: Trigger Render deploy hook
+        run: curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL"
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+  deploy-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [run-migrations, deploy-frontend-vercel, deploy-backend-render]
+    if: ${{ always() }}
+
+    steps:
+      - name: Print summary
+        run: |
+          echo "CD workflow finished."
+          echo "Frontend deployed when VERCEL_DEPLOY_HOOK_URL is set."
+          echo "Backend deployed when RENDER_DEPLOY_HOOK_URL is set."
+          echo "Migrations run when DATABASE_URL is set."

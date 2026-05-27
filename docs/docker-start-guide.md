@@ -20,7 +20,7 @@ powershell -ExecutionPolicy Bypass -File ./scripts/docker-start.ps1 -WithFronten
 
 This command will:
 - Start PostgreSQL and backend.
-- Apply migration 001.
+- Apply all migrations in backend/migrations.
 - Auto-initialize frontend if frontend/package.json is missing.
 - Start frontend on port 3000.
 
@@ -49,7 +49,11 @@ docker compose --profile frontend down -v
 
 ## 5) Re-run migration manually
 
-Get-Content "backend/migrations/001_init.sql" | docker compose exec -T postgres psql -U postgres -d sales_db -f -
+Get-ChildItem "backend/migrations/*.sql" | Sort-Object Name | ForEach-Object { Get-Content $_.FullName | docker compose exec -T postgres psql -U postgres -d sales_db -f - }
+
+Default admin account after migration:
+- email: admin@example.com
+- password: admin123
 
 ## 6) Troubleshooting
 - If frontend service says package.json missing, run:
