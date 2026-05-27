@@ -93,6 +93,7 @@ Definition of done for architecture changes:
 - 2026-05-27: Added Docker Compose setup for PostgreSQL + backend and Docker-based frontend initialization guide.
 - 2026-05-27: Added Docker start automation scripts and a single Docker start guide.
 - 2026-05-27: Added GitHub Codespaces setup (.devcontainer) and run guide for no-local-install workflow.
+- 2026-05-27: Initialized Next.js frontend base in frontend with runnable dev/build/start scripts.
 
 ## 10) Next Implementation Step
 - Implement Auth module (login, refresh, middleware).
