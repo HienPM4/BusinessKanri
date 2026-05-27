@@ -95,6 +95,7 @@ Definition of done for architecture changes:
 - 2026-05-27: Added GitHub Codespaces setup (.devcontainer) and run guide for no-local-install workflow.
 - 2026-05-27: Added GitHub Actions CI/CD workflows and setup guide for secrets and deploy hooks.
 - 2026-05-27: Implemented Auth module (login, refresh, JWT middleware, /v1/auth/me) and seeded default admin migration.
+- 2026-05-27: Initialized Next.js frontend base in frontend with runnable dev/build/start scripts.
 
 ## 10) Next Implementation Step
 - Implement Product module CRUD endpoints.
